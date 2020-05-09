@@ -1,5 +1,6 @@
 import scrapy
 from behold import Behold
+import html_text
 
 
 class SignalStartSpider(scrapy.Spider):
@@ -12,22 +13,28 @@ class SignalStartSpider(scrapy.Spider):
 
         cols = "rank name gain pips drawdown trades type monthly chart price age added action"
 
-        skip = [9,13]
+        skip = [7, 8]
 
         td = dict()
         for i, col in enumerate(cols.split()):
             td[i] = col
 
+        print("about to behold td...")
         Behold().show('td')
 
         for provider in response.xpath("//div[@class='row']//tr"):
             data_row = dict()
-            for i, datum in enumerate(provider.xpath('td/text()')):
-                if i in skip:
-                    continue
-                data_row[td[i]] = datum.get()
+            Behold().show('provider')
+            for i, datum in enumerate(provider.xpath('td')):
+                print("showing i and datum..")
+                Behold().show('i', 'datum')
+                # if i in skip:
+                #     pass
+                data_row[td[i]] = html_text.extract_text(datum.get())
                 # Behold().show('datum')
             yield data_row
+
+
 
             # yield {
             #     'rank': provider.xpath('td[1]/text()').get(),
