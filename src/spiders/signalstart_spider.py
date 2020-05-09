@@ -11,13 +11,11 @@ class SignalStartSpider(scrapy.Spider):
     def parse(self, response):
         for provider in response.xpath("//div[@class='row']//tr"):
 
-        Behold().show('search_signals_table')
-        for quote in response.css('div.quote'):
             yield {
-                'author': quote.xpath('span/small/text()').get(),
-                'text': quote.css('span.text::text').get(),
+                'rank': provider.xpath('td[1]/text()').get(),
+                'name': provider.xpath('td[2]/text()').get(),
             }
 
-        next_page = response.css('li.next a::attr("href")').get()
-        if next_page is not None:
-            yield response.follow(next_page, self.parse)
+        # next_page = response.css('.fa-angle-right').get()
+        # if next_page is not None:
+        #     yield response.follow(next_page, self.parse)
