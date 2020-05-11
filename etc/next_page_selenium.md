@@ -1,3 +1,24 @@
+I am attempting to paginate through the data table on [this page](https://www.signalstart.com/search-signals), located below the search form.
+
+My code successfully scrapes the first page and I successfully click the next button (using Selenium) to get the next page of results.
+
+However, attempting to create a `Response` instance and passing it to `self.parse()` does not work:
+
+```python
+            page_source = self.driver.page_source
+            r = scrapy.http.HtmlResponse('://!', body=page_source, encoding='utf-8')
+            print(" >>>> calling self.parse again")
+            return self.parse(r)
+```
+
+Also, even though if you analyze the call stack, I am returning `None` from `self.parse`, I get this warning when running this scrapy spider:
+
+>  The "SignalStartSpider.parse" method is a generator and includes a "return" statement with a value different than None. This could lead to unexpected behaviour. Please see https://docs.python.org/3/reference/simple_stmts.html#the-return-statement for details about the semantics of the "return" statement within generators
+  warn_on_generator_with_return_value(spider, callback)
+
+Here is my current source code:
+
+```python
 # -*- coding: utf-8 -*-
 import scrapy
 from behold import Behold
@@ -12,7 +33,6 @@ URL_1000="https://www.signalstart.com/paging.html?pt=1&sb=48&st=1&ts=705&yieldTy
 class Provider(scrapy.Item):
     rank = scrapy.Field()
     name = scrapy.Field()
-    link = scrapy.Field()
     gain = scrapy.Field()
     pips = scrapy.Field()
     drawdown = scrapy.Field()
@@ -101,42 +121,41 @@ class SignalStartSpider(scrapy.Spider):
 
         Behold().show('td')
 
-        while True:
-            for provider in response.xpath("//div[@class='row']//tr"):
-                data_row = Provider()
-                Behold().show('provider')
-                details_url = None
+        for provider in response.xpath("//div[@class='row']//tr"):
+            data_row = Provider()
+            Behold().show('provider')
+            details_url = None
 
-                for i, datum in enumerate(provider.xpath('td')):
-                    Behold().show('i', 'datum')
-                    if i in skip:
-                        print(".....skipping")
-                        continue
-                    text = html_text.extract_text(datum.get())
-                    column_name = td[i]
-                    if column_name in postprocess:
-                        text = postprocess[column_name](text)
-                    data_row[column_name] = text
-                    if i == 1:  # name
-                        details_url = datum.css("a::attr(href)").get()
-                        data_row['link'] = details_url
-                if details_url:
-                    yield scrapy.Request(url=details_url, callback=self.parse_details, meta={'data_row': data_row})
+            for i, datum in enumerate(provider.xpath('td')):
+                Behold().show('i', 'datum')
+                if i == 1: # name
+                    details_url = datum.css("a::attr(href)").get()
+                if i in skip:
+                    print(".....skipping")
+                    continue
+                text = html_text.extract_text(datum.get())
+                column_name = td[i]
+                if column_name in postprocess:
+                    text = postprocess[column_name](text)
+                data_row[column_name] = text
+            if details_url:
+                yield scrapy.Request(url=details_url, callback=self.parse_details, meta={'data_row': data_row})
 
-            print("------------------------------- next page logic --------------------------------------")
+        print("------------------------------- next page logic --------------------------------------")
 
-            next = self.driver.find_element_by_css_selector('.fa-angle-right')
-            if next is not None:
-                print(" **** NEXT IS -NOT- NONE")
-                next.click()
-                page_source = self.driver.page_source
-                r = scrapy.http.HtmlResponse('://!', body=page_source, encoding='utf-8')
-                print(" >>>> looping self.parse again")
-                response = r
-            else:
-                print(" **** NEXT IS NONE")
-                break
+        next = self.driver.find_element_by_css_selector('.fa-angle-right')
+        if next is not None:
+            print(" **** NEXT IS -NOT- NONE")
+            next.click()
+            page_source = self.driver.page_source
+            r = scrapy.http.HtmlResponse('://!', body=page_source, encoding='utf-8')
+            print(" >>>> calling self.parse again")
+            return self.parse(r)
+        else:
+            print(" **** NEXT IS NONE")
+            return None
 
         # next_page = response.css('.fa-angle-right').get()
         # if next_page is not None:
         #     yield response.follow(next_page, self.parse)
+```

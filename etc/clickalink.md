@@ -10,4 +10,4 @@ But I need to enhance it to click the link, parse some fields on the details pag
 
 # Answered 
 https://stackoverflow.com/questions/61705231/how-to-click-a-link-in-scrapy-parse-some-data-on-the-new-page-and-then-return-t
-
+https://docs.scrapy.org/en/latest/topics/request-response.html#topics-request-response-ref-request-callback-arguments

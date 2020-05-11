@@ -2,3 +2,4 @@ scrapy
 behold
 html-text
 durations
+selenium
