@@ -20,3 +20,7 @@ CSV to a github repo and use [Github's automatic CSV rendering](https://help.git
 to render the CSV.
 
 
+# Discussion
+
+* http://mymoneymagick.com/investing/advanced-analysis-of-signalstart-forex-signal-providers/
+* https://www.reddit.com/r/scrapy/comments/ghjygm/success_clicking_ajax_pagination_links/
