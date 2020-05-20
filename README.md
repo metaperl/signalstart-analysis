@@ -13,11 +13,23 @@ pip install -r requirements.txt
 ```shell
 cd signalstart-analysis/signalstart
 scrapy crawl signalstart -o data.csv
+cp data.csv ../docs/data
 ```
 
-Upload data.csv to Google Sheets and analyze. Or: commit the 
-CSV to a github repo and use [Github's automatic CSV rendering](https://help.github.com/en/github/managing-files-in-a-repository/rendering-csv-and-tsv-data) 
-to render the CSV.
+## Visualization
+
+Upload data.csv to Google Sheets and analyze. 
+
+### Or push to github 
+
+In concert with https://github.com/derekeder/csv-to-html-table
+I simply render there. My `docs` folder was created via:
+
+    $ git clone git@github.com:derekeder/csv-to-html-table.git docs
+    
+and then I simply set it up as documented there.
+
+
 
 
 # Discussion
