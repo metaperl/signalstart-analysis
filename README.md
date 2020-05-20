@@ -3,7 +3,7 @@ Scrape the data for the forex signal providers at
 www.SignalStart.com and provide data for 
 deeper analysis of provider results.
 
-In a hurry [feast your eyes](https://metaperl.github.io/signalstart-analysis/)
+In a hurry? [Feast your eyes](https://metaperl.github.io/signalstart-analysis/)
 on the results.
 
 ## Synopsis of Problem
