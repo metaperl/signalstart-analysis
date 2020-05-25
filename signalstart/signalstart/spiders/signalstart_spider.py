@@ -128,18 +128,17 @@ class SignalStartSpider(scrapy.Spider):
 
             print("------------------------------- next page logic --------------------------------------")
 
-            time.sleep(10)
-
-            next = self.driver.find_element_by_css_selector('.fa-angle-right')
-
             def get_page_source():
                 page_source = self.driver.page_source
                 r = scrapy.http.HtmlResponse('://!', body=page_source, encoding='utf-8')
                 print(" >>>> looping self.parse again")
                 return r
 
+            time.sleep(10)
+            next = self.driver.find_element_by_css_selector('.fa-angle-right')
+
             if next is not None:
-                print(" **** NEXT IS -NOT- NONE: there is another page to navigate to")
+                print(" *** NEXT IS -NOT- NONE: there is another page to navigate to")
                 next.click()
                 response = get_page_source()
             else:
@@ -148,6 +147,7 @@ class SignalStartSpider(scrapy.Spider):
                     response = get_page_source()
                     print(" *** there is not another page to navigate to.. but we need to parse the final page")
                 else:
+                    print(" *** Now we shall exit!")
                     break
 
 
