@@ -7,5 +7,5 @@ wc -l data.csv
 cp data.csv ../docs/data
 
 git add ../docs/data
-git commit -a -m 'scrape run'
+git commit -a -m 'scrape run `date`'
 git push

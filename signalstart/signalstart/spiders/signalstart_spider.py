@@ -4,6 +4,7 @@ from behold import Behold
 import html_text
 import durations
 from selenium import webdriver
+import time
 
 
 URL_20 = "https://www.signalstart.com/search-signals"
@@ -124,6 +125,8 @@ class SignalStartSpider(scrapy.Spider):
                     yield scrapy.Request(url=details_url, callback=self.parse_details, meta={'data_row': data_row})
 
             print("------------------------------- next page logic --------------------------------------")
+
+            time.sleep(30)
 
             next = self.driver.find_element_by_css_selector('.fa-angle-right')
             if next is not None:
