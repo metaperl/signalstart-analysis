@@ -6,6 +6,8 @@ import durations
 from selenium import webdriver
 import time
 
+from loguru import logger
+
 
 URL_20 = "https://www.signalstart.com/search-signals"
 URL_1000="https://www.signalstart.com/paging.html?pt=1&sb=48&st=1&ts=705&yieldType=&yieldVal=&drawType=&drawVal=&pipsType=&pipsVal=&type=&ageType=&tradesType=&tradesVal=&priceType=&priceVal=&fifoVal=&searchVal=&serversMultiSearch=&ps=1000&p=1&z=0.410257937140464"
@@ -73,7 +75,15 @@ class SignalStartSpider(scrapy.Spider):
         for field, field_processor in fields.items():
             print(f"     Process {field}")
             elem = response.xpath(field_processor['xpath'])
-            _, value = html_text.extract_text(elem.get()).split(':')
+            elem_get = elem.get()
+            logger.debug(f"Elem get() returned {elem_get}")
+
+            text = html_text.extract_text(elem_get)
+            logger.debug(f"Extracted text = {text}")
+
+            _, value = text.split(':')
+            logger.debug(f"Parsed value = {value}")
+            
             response.meta["data_row"][field] = value
         yield response.meta["data_row"]
 

@@ -3,3 +3,4 @@ behold
 html-text
 durations
 selenium
+loguru
