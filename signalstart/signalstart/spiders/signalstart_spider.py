@@ -70,7 +70,7 @@ class SignalStartSpider(scrapy.Spider):
         fields['won']['xpath'] = "//li[contains(text(),'Won:')]"
         fields['profit_factor']['xpath'] = "//li[@class='list-group-item popovers']"
         fields['daily']['xpath'] = "//body//div[@class='row']//div[@class='row']//div[3]//ul[1]//li[2]"
-        fields['monthly']['xpath'] = "//li[contains(text(),'Monthly:')]"
+        fields['monthly']['xpath'] = "//body//div[@class='row']//div[@class='row']//div[3]//ul[1]//li[3]"
 
         logger.debug("--------------------------------------- Details parse")
 
