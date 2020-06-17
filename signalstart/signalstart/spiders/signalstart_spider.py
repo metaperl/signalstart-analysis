@@ -72,8 +72,10 @@ class SignalStartSpider(scrapy.Spider):
         fields['daily']['xpath'] = "//li[contains(text(),'Daily:')]"
         fields['monthly']['xpath'] = "//li[contains(text(),'Monthly:')]"
 
+        logger.debug("--------------------------------------- Details parse")
+
         for field, field_processor in fields.items():
-            print(f"     Process {field}")
+            logger.debug(f"     Processing {field}")
             elem = response.xpath(field_processor['xpath'])
             elem_get = elem.get()
             logger.debug(f"Elem get() returned {elem_get}")
@@ -83,7 +85,7 @@ class SignalStartSpider(scrapy.Spider):
 
             _, value = text.split(':')
             logger.debug(f"Parsed value = {value}")
-            
+
             response.meta["data_row"][field] = value
         yield response.meta["data_row"]
 
