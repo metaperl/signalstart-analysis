@@ -32,6 +32,10 @@ class Provider(scrapy.Item):
     age = scrapy.Field()
     # added = scrapy.Field()
     # action = scrapy.Field()
+    balance = scrapy.Field()
+    expectancy = scrapy.Field()
+
+    lots = scrapy.Field()
     won = scrapy.Field()
     profit_factor = scrapy.Field()
     daily = scrapy.Field()
@@ -65,17 +69,28 @@ class SignalStartSpider(scrapy.Spider):
         self.driver = webdriver.Chrome()
 
     def parse_details(self, response):
+        """Details exist at https://www.signalstart.com/analysis/scalex/271455"""
 
         class Details(scrapy.Item):
             xpath = scrapy.Field()
             extractor = scrapy.Field() # I thought different fields would be extracted differently. But turns out they dont.
 
         fields = {
+           'expectancy': Details(),
+            'lots': Details(),
+
+            'balance': Details(),
             'won': Details(),
             'profit_factor': Details(),
             'daily': Details(),
             'monthly': Details()
         }
+
+        fields['lots']['xpath'] = "//li[contains(text(),'Lots')]"
+
+        fields['balance']['xpath'] = "//li[contains(text(),'Balance')]"
+        fields['expectancy']['xpath'] = "//li[span[contains(text(),'Expectancy')]]"
+
 
         fields['won']['xpath'] = "//li[contains(text(),'Won:')]"
         fields['profit_factor']['xpath'] = "//li[@class='list-group-item popovers']"
@@ -107,6 +122,7 @@ class SignalStartSpider(scrapy.Spider):
         self.driver.get(response.url)
         self.driver.find_element(By.XPATH, value="//a[contains(text(),'Gain')]").click()
 
+        #       0    1    2    3    4        5      6       7     8     9   10    11
         cols = "rank name gain pips drawdown trades monthly chart price age added action"
 
         skip = [7, 8, 11, 12]
