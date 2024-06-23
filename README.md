@@ -37,6 +37,8 @@ This has been reported to them.
 
 # Installation
 
+(suggested but not required: create a virtual environment before installing requirements)
+
 ```shell
 cd signalstart-analysis
 pip install -r requirements.txt
@@ -50,6 +52,13 @@ cd signalstart-analysis/signalstart
 scrapy crawl signalstart -o data.csv
 cp data.csv ../docs/data
 ```
+
+on windows
+```shell
+cd signalstart-analysis
+go
+```
+
 
 or simply
 

@@ -4,6 +4,8 @@ from behold import Behold
 import html_text
 import durations
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+import chromedriver_autoinstaller
 import time
 
 from loguru import logger
@@ -11,6 +13,9 @@ from loguru import logger
 
 URL_20 = "https://www.signalstart.com/search-signals"
 URL_1000="https://www.signalstart.com/paging.html?pt=1&sb=48&st=1&ts=705&yieldType=&yieldVal=&drawType=&drawVal=&pipsType=&pipsVal=&type=&ageType=&tradesType=&tradesVal=&priceType=&priceVal=&fifoVal=&searchVal=&serversMultiSearch=&ps=1000&p=1&z=0.410257937140464"
+
+
+chromedriver_autoinstaller.install()
 
 class Provider(scrapy.Item):
     rank = scrapy.Field()
@@ -40,6 +45,11 @@ def raw_page_url(i=1):
     """
     return "https://www.signalstart.com/paging.html?pt=1&sb=48&st=1&ts=705&yieldType=&yieldVal=&drawType=&drawVal=&pipsType=&pipsVal=&type=&ageType=&tradesType=&tradesVal=&priceType=&priceVal=&fifoVal=&searchVal=&serversMultiSearch=&ps=100&p={}&z=0.024967722664414493".format(i)
 
+def infinite_loop():
+    while True:
+        pass
+
+
 class SignalStartSpider(scrapy.Spider):
 
     page = 1
@@ -52,7 +62,7 @@ class SignalStartSpider(scrapy.Spider):
 
     def __init__(self):
         #self.driver = webdriver.Firefox(executable_path = r'C:\Users\terre\AppData\Local\Taurus\bin\geckodriver.exe')
-        self.driver = webdriver.Firefox(executable_path=r'/cygdrive/c/Users/terre/AppData/Local/Taurus/bin/geckodriver.exe')
+        self.driver = webdriver.Chrome()
 
     def parse_details(self, response):
 
@@ -95,13 +105,15 @@ class SignalStartSpider(scrapy.Spider):
 
         print(" >>>>>> URL of the response object is {}".format(response.url))
         self.driver.get(response.url)
-        self.driver.find_element_by_xpath("//a[contains(text(),'Gain')]").click()
+        self.driver.find_element(By.XPATH, value="//a[contains(text(),'Gain')]").click()
 
-        cols = "rank name gain pips drawdown trades type monthly chart price age added action"
+        cols = "rank name gain pips drawdown trades monthly chart price age added action"
 
         skip = [7, 8, 11, 12]
+        skip = [6, 7, 10, 11] # skip monthly, chart, added, action
 
         def age_to_months(t):
+            logger.debug(f"age_to_months on {t=}")
             t = t.replace('m', 'M')
             d = durations.Duration(t);
             return d.to_months()
@@ -115,6 +127,8 @@ class SignalStartSpider(scrapy.Spider):
             td[i] = col
 
         Behold().show('td')
+
+        # infinite_loop()
 
         while True:
             for provider in response.xpath("//div[@class='row']//tr"):
@@ -147,7 +161,7 @@ class SignalStartSpider(scrapy.Spider):
                 return r
 
             time.sleep(10)
-            next = self.driver.find_element_by_css_selector('.fa-angle-right')
+            next = self.driver.find_element(by=By.CSS_SELECTOR, value='.fa-angle-right')
 
             if next is not None:
                 print(" *** NEXT IS -NOT- NONE: there is another page to navigate to")
