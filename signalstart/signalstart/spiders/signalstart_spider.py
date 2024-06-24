@@ -40,6 +40,8 @@ class Provider(scrapy.Item):
     profit_factor = scrapy.Field()
     daily = scrapy.Field()
     monthly = scrapy.Field()
+    profit = scrapy.Field()
+    leverage = scrapy.Field()
 
 def raw_page_url(i=1):
     """
@@ -83,7 +85,9 @@ class SignalStartSpider(scrapy.Spider):
             'won': Details(),
             'profit_factor': Details(),
             'daily': Details(),
-            'monthly': Details()
+            'monthly': Details(),
+            'profit': Details(),
+            'leverage': Details()
         }
 
         fields['lots']['xpath'] = "//li[contains(text(),'Lots')]"
@@ -96,6 +100,9 @@ class SignalStartSpider(scrapy.Spider):
         fields['profit_factor']['xpath'] = "//li[@class='list-group-item popovers']"
         fields['daily']['xpath'] = "//body//div[@class='row']//div[@class='row']//div[3]//ul[1]//li[2]"
         fields['monthly']['xpath'] = "//body//div[@class='row']//div[@class='row']//div[3]//ul[1]//li[3]"
+        #Not working right yet:
+        fields['profit']['xpath'] = "(//body//div[@class='number'])[3]/text()"
+        fields['leverage']['xpath'] = "(//body//div[@class='caption-helper font-blue-sharp bold master-description-container'])[1]/text()"
 
         logger.debug("--------------------------------------- Details parse")
 
@@ -120,12 +127,12 @@ class SignalStartSpider(scrapy.Spider):
 
         print(" >>>>>> URL of the response object is {}".format(response.url))
         self.driver.get(response.url)
-        #self.driver.find_element(By.XPATH, value="//a[contains(text(),'Gain')]").click()
+        #Do 100 at a time:
+        self.driver.find_element(By.XPATH, value="/html/body/div[3]/div/div/div[2]/div/div[2]/div[3]/div[2]/div[1]/label/select/option[5]").click()
 
         #       0    1    2    3    4        5      6       7     8     9   10    11
         cols = "rank name gain pips drawdown trades monthly chart price age added action"
 
-        skip = [7, 8, 11, 12]
         skip = [6, 7, 10, 11] # skip monthly, chart, added, action
 
         def age_to_months(t):
