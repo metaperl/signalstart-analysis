@@ -40,8 +40,8 @@ class Provider(scrapy.Item):
     profit_factor = scrapy.Field()
     daily = scrapy.Field()
     monthly = scrapy.Field()
-    profit = scrapy.Field()
-    leverage = scrapy.Field()
+    #profit = scrapy.Field()
+    #leverage = scrapy.Field()
 
 def raw_page_url(i=1):
     """
@@ -85,9 +85,9 @@ class SignalStartSpider(scrapy.Spider):
             'won': Details(),
             'profit_factor': Details(),
             'daily': Details(),
-            'monthly': Details(),
-            'profit': Details(),
-            'leverage': Details()
+            'monthly': Details()
+            #'profit': Details(),
+            #'leverage': Details()
         }
 
         fields['lots']['xpath'] = "//li[contains(text(),'Lots')]"
@@ -101,8 +101,8 @@ class SignalStartSpider(scrapy.Spider):
         fields['daily']['xpath'] = "//body//div[@class='row']//div[@class='row']//div[3]//ul[1]//li[2]"
         fields['monthly']['xpath'] = "//body//div[@class='row']//div[@class='row']//div[3]//ul[1]//li[3]"
         #Not working right yet:
-        fields['profit']['xpath'] = "(//body//div[@class='number'])[3]/text()"
-        fields['leverage']['xpath'] = "(//body//div[@class='caption-helper font-blue-sharp bold master-description-container'])[1]/text()"
+        #fields['profit']['xpath'] = "(//body//div[@class='number'])[3]/text()"
+        #fields['leverage']['xpath'] = "(//body//div[@class='caption-helper font-blue-sharp bold master-description-container'])[1]/text()"
 
         logger.debug("--------------------------------------- Details parse")
 
