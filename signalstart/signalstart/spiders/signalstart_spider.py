@@ -52,15 +52,14 @@ class SignalStartSpider(scrapy.Spider):
     ]
 
     def __init__(self):
-        #self.driver = webdriver.Firefox(executable_path = r'C:\Users\terre\AppData\Local\Taurus\bin\geckodriver.exe')
         self.driver = webdriver.Chrome()
 
     def parse_details(self, response):
-        """Details exist at https://www.signalstart.com/analysis/scalex/271455"""
+        #Example page: https://www.signalstart.com/analysis/scalex/271455
 
         class Details(scrapy.Item):
             xpath = scrapy.Field()
-            extractor = scrapy.Field() # I thought different fields would be extracted differently. But turns out they dont.
+            extractor = scrapy.Field()
 
         fields = {
            'expectancy': Details(),
