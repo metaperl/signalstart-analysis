@@ -10,10 +10,7 @@ import time
 
 from loguru import logger
 
-
 URL_20 = "https://www.signalstart.com/search-signals"
-URL_1000="https://www.signalstart.com/paging.html?pt=1&sb=48&st=1&ts=705&yieldType=&yieldVal=&drawType=&drawVal=&pipsType=&pipsVal=&type=&ageType=&tradesType=&tradesVal=&priceType=&priceVal=&fifoVal=&searchVal=&serversMultiSearch=&ps=1000&p=1&z=0.410257937140464"
-
 
 chromedriver_autoinstaller.install()
 
@@ -43,14 +40,6 @@ class Provider(scrapy.Item):
     #profit = scrapy.Field()
     #leverage = scrapy.Field()
 
-def raw_page_url(i=1):
-    """
-    Return raw page of 100 results. There are 8 such pages
-    :param i: which page number
-    :return:
-    """
-    return "https://www.signalstart.com/paging.html?pt=1&sb=48&st=1&ts=705&yieldType=&yieldVal=&drawType=&drawVal=&pipsType=&pipsVal=&type=&ageType=&tradesType=&tradesVal=&priceType=&priceVal=&fifoVal=&searchVal=&serversMultiSearch=&ps=100&p={}&z=0.024967722664414493".format(i)
-
 def infinite_loop():
     while True:
         pass
@@ -62,7 +51,6 @@ class SignalStartSpider(scrapy.Spider):
 
     name = 'signalstart'
     start_urls = [
-        # raw_page_url(page),
         URL_20
     ]
 
