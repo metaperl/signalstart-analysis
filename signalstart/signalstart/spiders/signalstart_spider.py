@@ -22,13 +22,10 @@ class Provider(scrapy.Item):
     pips = scrapy.Field()
     drawdown = scrapy.Field()
     trades = scrapy.Field()
-    type = scrapy.Field()
     monthly = scrapy.Field()
-    # chart = scrapy.Field()
     price = scrapy.Field()
     age = scrapy.Field()
     # added = scrapy.Field()
-    # action = scrapy.Field()
     balance = scrapy.Field()
     expectancy = scrapy.Field()
 
