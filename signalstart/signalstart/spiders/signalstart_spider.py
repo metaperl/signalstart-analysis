@@ -10,7 +10,7 @@ import time
 
 from loguru import logger
 
-URL_20 = "https://www.signalstart.com/search-signals"
+URL = "https://www.signalstart.com/search-signals"
 
 chromedriver_autoinstaller.install()
 
@@ -48,7 +48,7 @@ class SignalStartSpider(scrapy.Spider):
 
     name = 'signalstart'
     start_urls = [
-        URL_20
+        URL
     ]
 
     def __init__(self):
