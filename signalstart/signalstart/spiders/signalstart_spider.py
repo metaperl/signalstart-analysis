@@ -120,7 +120,7 @@ class SignalStartSpider(scrapy.Spider):
 
         print(" >>>>>> URL of the response object is {}".format(response.url))
         self.driver.get(response.url)
-        self.driver.find_element(By.XPATH, value="//a[contains(text(),'Gain')]").click()
+        #self.driver.find_element(By.XPATH, value="//a[contains(text(),'Gain')]").click()
 
         #       0    1    2    3    4        5      6       7     8     9   10    11
         cols = "rank name gain pips drawdown trades monthly chart price age added action"
