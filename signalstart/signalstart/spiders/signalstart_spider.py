@@ -193,7 +193,7 @@ class SignalStartSpider(scrapy.Spider):
                 print(" >>>> looping self.parse again")
                 return r
 
-            time.sleep(10)
+            time.sleep(3)
             next = self.driver.find_element(by=By.CSS_SELECTOR, value='.fa-angle-right')
 
             if next is not None:
