@@ -102,16 +102,16 @@ class SignalStartSpider(scrapy.Spider):
         fields['currency'][
             'xpath'] = "//div[contains(@class, 'caption-helper font-blue-sharp bold master-description-container')]"
 
-        logger.debug("--------------------------------------- Details parse")
+        # logger.debug("--------------------------------------- Details parse")
 
         for field, field_processor in fields.items():
-            logger.debug(f"     Processing {field}")
+            # logger.debug(f"     Processing {field}")
             elem = response.xpath(field_processor['xpath'])
             elem_get = elem.get()
-            logger.debug(f"Elem get() returned {elem_get}")
+            # logger.debug(f"Elem get() returned {elem_get}")
 
             text = html_text.extract_text(elem_get)
-            logger.debug(f"Extracted text = {text}")
+            # logger.debug(f"Extracted text = {text}")
 
             # Parsing text to get values based on format of fields
             if field == 'expectancy':
@@ -126,7 +126,7 @@ class SignalStartSpider(scrapy.Spider):
                 value = extract_number(text.split()[1])
             else:
                 _, value = text.split(':')
-            logger.debug(f"Parsed value = {value}")
+            # logger.debug(f"Parsed value = {value}")
             response.meta["data_row"][field] = value
         yield response.meta["data_row"]
 
@@ -146,7 +146,7 @@ class SignalStartSpider(scrapy.Spider):
         skip = [6, 7, 10, 11]  # skip monthly, chart, added, action
 
         def age_to_months(t):
-            logger.debug(f"age_to_months on {t=}")
+            # logger.debug(f"age_to_months on {t=}")
             t = t.replace('m', 'M')
             d = durations.Duration(t);
             return d.to_months()
