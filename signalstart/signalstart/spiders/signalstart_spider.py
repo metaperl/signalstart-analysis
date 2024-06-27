@@ -189,9 +189,8 @@ class SignalStartSpider(scrapy.Spider):
                     yield scrapy.Request(
                         url=details_url,
                         callback=self.parse_details,
-                        meta={"data_row": data_row},
+                        meta={"data_row": data_row}
                     )
-                    print("Processing: {details_url}")
 
         while True:
             yield from process_providers(response)
