@@ -132,4 +132,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 *.csv
-/docs/data
+/docs/data/
