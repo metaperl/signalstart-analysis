@@ -191,6 +191,7 @@ class SignalStartSpider(scrapy.Spider):
                         callback=self.parse_details,
                         meta={"data_row": data_row}
                     )
+                    # print("Processing page: " + details_url)
 
         while True:
             yield from process_providers(response)
