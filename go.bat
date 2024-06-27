@@ -1,4 +1,5 @@
-cd signalstart
-scrapy crawl signalstart -o data.csv
-copy data.csv ..\docs\data
+cd %~dp0\signalstart
+scrapy crawl signalstart -O ..\docs\data\data.csv
 cd ..
+echo "Scrape completed!"
+pause
