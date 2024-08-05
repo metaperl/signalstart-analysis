@@ -52,7 +52,7 @@ def extract_number(text: str) -> float:
     Extracts and return the number from a given text string, removing non-numeric characters.
     Used for cleaning balance and profit fields.
     """
-    number_str = re.sub(r"[^\d.]+", "", text)
+    number_str = re.search("[+-]?", text).group()+re.search("[0-9.]+", text).group()
     return float(number_str)
 
 
@@ -123,7 +123,7 @@ class SignalStartSpider(scrapy.Spider):
 
             # Parsing text to get values based on format of fields
             if field == "expectancy":
-                value = re.search(r"(\d+)\s+[Pp]ips", text).group(1)
+                value = re.search(r"([+-]?\d+)\s+[Pp]ips", text).group(1)
             elif field == "leverage":
                 value = text.split(",")[4].split(":")[1]
             elif field == "currency":
